@@ -2,6 +2,8 @@ import  {  BrowserRouter ,  Routes ,  Route  }  from  'react-router-dom' ;
 import  {  useState  }  from  'react' ;
 import SignUp from './SignUp.js'
 import Context from "../contexts/Context.js";
+import SignIn from './SignIn.js';
+import Main from './Main.js';
 
 
 export default function App(){
@@ -12,7 +14,10 @@ export default function App(){
         <Context.Provider value = {{infoLogin , setInfoLogin }}>
             <BrowserRouter>
               <Routes>
-                  <Route path="/sign-up" element={<SignUp />}/> 
+                  <Route path="/sign-up" element={<SignUp />}/>
+                  <Route path="/sign-in" element={<SignIn />}/>
+                  <Route path="/main" element={<Main />}/> 
+ 
               </Routes>    
             </BrowserRouter>
         </Context.Provider>
