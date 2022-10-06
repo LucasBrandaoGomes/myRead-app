@@ -28,7 +28,7 @@ export default function SignUp(){
             
             }
 
-        const promise = axios.post("http://localhost:4000/sign-up", infoSignUp)
+        const promise = axios.post("http://localhost:4001/sign-up", infoSignUp)
         
         promise
         .then(res =>{ 
@@ -70,7 +70,7 @@ const ContainerAuth = styled.div`
     flex-direction: column;
     align-items:center;
     justify-content:center;
-    background-color: #D37545;
+    background-color: #F0AD35;
 
     h1{
     font-family: 'Shippori Antique';

@@ -28,12 +28,12 @@ export default function SignIn(){
                 password:password
             }
             
-        const promise = axios.post("http://localhost:4000/sign-in", sendLogin)
+        const promise = axios.post("http://localhost:4001/sign-in", sendLogin)
         
         promise            
         .then(res => {
-            setInfoLogin({...res.data});
-            navigate("/menu");
+            setInfoLogin([res.data]);
+            navigate("/main");
 
         })
         .catch(err=> {
@@ -61,14 +61,13 @@ export default function SignIn(){
 }
 
 const ContainerAuth = styled.div`
-    width: 100%;
+    width: 100vw;
     height: 100vh;   
     display: flex;
     flex-direction: column;
     align-items:center;
     justify-content:center;
-    background-color: #D37545;
-    background-color: #D37545;
+    background-color: #F0AD35;
 
     h1{
     font-family: 'Shippori Antique';
