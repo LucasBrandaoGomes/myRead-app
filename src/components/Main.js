@@ -41,7 +41,7 @@ export default function Main(){
                             <h1 onClick={() => RenderBookInfo(id)}>{title}</h1>
                             <h2>{author}</h2>
                         </div>
-                        <button disabled={disableButton}><ion-icon onClick={() => AddNewRead(id)} name="bookmarks"></ion-icon></button>
+                        <button disabled={disableButton} onClick={() => AddNewRead(id)}>+</button>
                     </BookInfo>
                 </Books>
             </>
@@ -58,9 +58,8 @@ export default function Main(){
         
         try {
             const response = await axios.post(
-              `http://localhost:4001/books/reads/${id}`, config
+              `http://localhost:4001/books/reads/${id}`, {}, config
             );
-            setBooks(response.data);
           } catch (err) {
             console.log(`Error: ${err.response.data}`);
             setDisableButton(false);
@@ -73,8 +72,8 @@ export default function Main(){
             <Content>
                 {renderOneBook?
                 <OneBookContainer>
-                    {oneBook.map(book => <RenderBooks title={book.title} author={book.author} id={book.id} setRenderOneBook={setRenderOneBook} />)}
-                    <span>Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum</span>
+                    {oneBook.map(book => <><RenderBooks title={book.title} author={book.author} id={book.id} setRenderOneBook={setRenderOneBook} />
+                    <span>{book.synopsis}</span></>)}
                 </OneBookContainer>
                 :
                 <BooksContainer>
@@ -110,6 +109,7 @@ const Books = styled.div`
     background-color: #ffffff;
     display: flex;
     margin: 2%;
+    border-radius: 8px;
     align-items: center;
     justify-content: space-around;
 
@@ -133,34 +133,37 @@ const BookInfo = styled.div`
     background-color:#ffffff;
 
     div:nth-child(1){
-        height:45%;
+        width:100%;
         display:flex;
         flex-direction:column;
-        justify-content: space-between;
-        h1{
+        h1{ 
+            word-wrap: break-word;
             color:red;
-            font-size:20px;
+            font-size:18px;
             :hover{
                 cursor: pointer;
             }
+            margin-bottom:10px;
         }
         h2{
             color: gray;
             font-size:16px;
         }
     }
-    button:nth-child(2){
-        width:100%;
+    button{
+        width:35%;
         display:flex;
-        justify-content: flex-end;
-        padding-right:5%;
-        ion-icon{
-            font-size:28px;
-            color:#A5A1CE;
-            :hover{
-                cursor:pointer;
-            }
+        justify-content: center;
+        align-items:center;
+        border: none;
+        border-radius: 35px;
+        padding-bottom:5px;
+        font-size:30px;
+        color: ${props => props.disabled ? "red" : "green" };
+        :hover{
+            cursor:pointer;
         }
+        
     }
 `
 
