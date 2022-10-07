@@ -4,22 +4,23 @@ import styled from "styled-components";
 import { useNavigate } from "react-router-dom";
 import UserContext from "../contexts/Context";
 
-export default function Header({books, setBooks}) {
+export default function Header({setBooks, setRenderOneBook}) {
     const navigate = useNavigate()
     const [search, setSearch] = useState ('')
     const { infoLogin } = useContext(UserContext);
 
     async function searchBook(str) {
         setSearch(str);
-        
+
         const config ={
             headers:{Authorization: `Bearer ${infoLogin[0]}`}
         }
-            
+
         try {
           const response = await axios.get(
             `http://localhost:4001/books?search=${search}`, config
           );
+          setRenderOneBook(false)
           setBooks(response.data);
         } catch (err) {
           console.log(`Error: ${err.response.data}`);
@@ -33,7 +34,9 @@ export default function Header({books, setBooks}) {
 
                 <Search>
                     <ion-icon  name="search-outline" ></ion-icon>
-                    <input type="text" placeholder="Pesquisar..." value={search} onChange={(e) => searchBook(e.target.value)}/>           
+                    <input type="text" placeholder="Pesquisar..." value={search} onChange={(e) => 
+                    searchBook(e.target.value)
+                    }/>           
                 </Search>
 
                 <RightOptions>
