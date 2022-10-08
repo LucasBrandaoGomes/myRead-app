@@ -1,10 +1,8 @@
 import styled from "styled-components"
-import {useState} from "react"
-import { Link } from "react-router-dom"
+import {useState, useEffect, useContext} from "react"
 import axios from "axios"
 import { ThreeDots } from "react-loader-spinner";
-import {useNavigate} from 'react-router-dom';
-import { useContext } from "react";
+import {useNavigate, Link} from 'react-router-dom';
 import Context from "../contexts/Context.js"
 
 
@@ -14,37 +12,39 @@ export default function SignIn(){
     const [email, setEmail] = useState("")
     const [password, setPassword] = useState("")
     const [disableButton,setDisableButton] = useState(false)
-    
     const { setInfoLogin } = useContext(Context);
 
-    function SubmitLogin(event){
+    async function SubmitLogin(event){
+        setDisableButton(true);
         event.preventDefault();
         
-        setDisableButton(true);
-
         const sendLogin =
             {
                 email:email,
                 password:password
             }
-            
-        const promise = axios.post("http://localhost:4001/sign-in", sendLogin)
         
-        promise            
-        .then(res => {
-            setInfoLogin([res.data]);
+        try{
+            const response = await axios.post("http://localhost:4001/sign-in", sendLogin)
+            setInfoLogin([response.data]);
+            saveLoginInLocalStorage(response.data)
             navigate("/main");
 
-        })
-        .catch(err=> {
-            alert("Erro Login");
-            setDisableButton(false)})
-    }
+        }catch(err){
+            alert(`Error: ${err.response.data}`);
+            setDisableButton(false)
+        }
+        }    
+
+        function saveLoginInLocalStorage(body) {
+            const bodySave = JSON.stringify(body);
+            localStorage.setItem("autoLogin", bodySave);
+        }
 
     return(
         <>
             <ContainerAuth>  
-                <h1>agendIN</h1>
+                <h1>myRead</h1>
                 <Form onSubmit={SubmitLogin}>
                     <input type="email" disabled={disableButton} placeholder="email"  value={email} onChange={e => setEmail(e.target.value)} required/>
                     <input type="password" disabled={disableButton} placeholder="password" value={password} onChange={e => setPassword(e.target.value)} required/>
