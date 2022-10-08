@@ -4,33 +4,52 @@ import styled from "styled-components";
 import { useNavigate } from "react-router-dom";
 import UserContext from "../contexts/Context";
 
-export default function Header({setBooks, setRenderOneBook}) {
+export default function Header({setBooks, setRenderOneBook, setRenderReads, reload, setReload, setDisableButton}) {
     const navigate = useNavigate()
     const [search, setSearch] = useState ('')
-    const { infoLogin } = useContext(UserContext);
+    const { infoLogin, setInfoLogin } = useContext(UserContext);
+
+    const config ={
+      headers:{Authorization: `Bearer ${infoLogin[0]}`}
+      }
 
     async function searchBook(str) {
         setSearch(str);
-
-        const config ={
-            headers:{Authorization: `Bearer ${infoLogin[0]}`}
-        }
 
         try {
           const response = await axios.get(
             `http://localhost:4001/books?search=${search}`, config
           );
+          setRenderReads(false)
           setRenderOneBook(false)
           setBooks(response.data);
         } catch (err) {
-          console.log(`Error: ${err.response.data}`);
+          console.log(`Error: ${err}`);
         }
+    }
+
+    async function myReads() {
+      setDisableButton(true)
+      try {
+        const response = await axios.get(
+          `http://localhost:4001/books/reads`, config
+        );
+        setRenderOneBook(false)
+        setBooks(response.data);
+        setRenderReads(true)
+      } catch (err) {
+        console.log(`Error: ${err.response.data}`);
       }
+    }
 
-
+    function refresh(){
+      setReload(!reload)
+      setRenderReads(false)
+      setRenderOneBook(false)
+    }
     return(
         <HeaderContainer>
-                <Title onClick={() => navigate("/main")}>myRead</Title>
+                <Title onClick={() => refresh()}>myRead</Title>
 
                 <Search>
                     <ion-icon  name="search-outline" ></ion-icon>
@@ -40,7 +59,7 @@ export default function Header({setBooks, setRenderOneBook}) {
                 </Search>
 
                 <RightOptions>
-                    <ion-icon onClick={() => navigate("/books/reads")} name="book-outline"></ion-icon>
+                    <ion-icon onClick={() => myReads()} name="book-outline"></ion-icon>
                     <ion-icon onClick={() => navigate("/sign-in")} name="log-out-outline"></ion-icon>
                 </RightOptions>  
         </HeaderContainer>
