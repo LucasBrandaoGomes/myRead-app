@@ -3,24 +3,24 @@ import {useState} from "react";
 import axios from "axios";
 import {useEffect} from 'react';
 import { useContext } from "react";
-import {useNavigate} from 'react-router-dom';
 import UserContext from "../contexts/Context";
 import Header from "./Header";
+import { checkLocalStorageToRefresh } from "./utils/autoRefresh";
 
 export default function Main(){
 
-    const navigate = useNavigate();
     const { infoLogin } = useContext(UserContext);
     const [books, setBooks] = useState([])
     const [renderOneBook, setRenderOneBook] = useState(false)
     const [oneBook, setOneBook] = useState([])
-    const [disableButton,setDisableButton] = useState(false)
-
-
-    const config = 
-    {
+    const [disableButton,setDisableButton] = useState(true)
+    const [renderReads, setRenderReads] = useState(false)
+    const [reload, setReload] = useState(false)
+    
+    const config ={
         headers:{Authorization: `Bearer ${infoLogin[0]}`}
-    }
+        }
+
 
     useEffect(() => {
 
@@ -29,56 +29,110 @@ export default function Main(){
         promise.then(res => {
             setBooks([...res.data]);
             });
-        }, []);
+        }, [reload]);
 
-    function RenderBooks({title, author, id}){
+    function RenderBooks({title, author, id, disabled}){
         return (
             <>
-                <Books>
-                    <img onClick={() => RenderBookInfo(id)} src="public/img"></img>
-                    <BookInfo>
+                <Books >
+                    <img onClick={() => {RenderBookInfo(id)}} src="public/img"></img>
+                    <BookInfo disabled={disabled}>
                         <div>
-                            <h1 onClick={() => RenderBookInfo(id)}>{title}</h1>
-                            <h2>{author}</h2>
+                            <h2 onClick={() => RenderBookInfo(id)}>{title}</h2>
+                            <h3>{author}</h3>
                         </div>
-                        <button disabled={disableButton} onClick={() => AddNewRead(id)}>+</button>
+                        <button disabled={disabled} onClick={() => AddNewRead(id)}>+</button>
                     </BookInfo>
                 </Books>
             </>
         )
     }
+
     function RenderBookInfo(id){
+        setDisableButton(false)
         const book = books.filter(item => item.id === id)
+        setRenderReads(false)
         setRenderOneBook(true)
         setOneBook(book)
+
     }
 
     async function AddNewRead(id){
-        setDisableButton(true);
         
         try {
             const response = await axios.post(
               `http://localhost:4001/books/reads/${id}`, {}, config
+              
             );
+            setDisableButton(true);
+
           } catch (err) {
             console.log(`Error: ${err.response.data}`);
             setDisableButton(false);
           }
     }
 
+
+    async function updatePage(id){
+        const data = prompt("Digite sua págia atual:")
+        const value = {readPages: data}
+        try {
+            const response = await axios.put(
+              `http://localhost:4001/books/reads/${id}`, value , config
+            );
+          } catch (err) {
+            if(err.response.data === "Invalid page value"){
+                alert("Invalid page value")
+            }
+          }
+    }
+
+    function RenderReads({title, author, id, totalPages, readPages}){
+        return(
+            <Reads>
+                <img src="public/img"></img>
+                    <ReadBookInfo>
+                        <div>
+                            <h2>{title}</h2>
+                            <h3>{author}</h3>
+                        </div>
+                        <NewValue>
+                            <span onClick={() => updatePage(id)}>{readPages}/{totalPages}</span>                            
+                        </NewValue>
+                        
+                    </ReadBookInfo>
+            </Reads>
+        )
+    }
+
     return(
         <>    
-            <Header books={books} setBooks={setBooks} setRenderOneBook={setRenderOneBook} renderOneBook={renderOneBook }/>
+            <Header books={books} setBooks={setBooks} setRenderOneBook={setRenderOneBook} setRenderReads={setRenderReads} setReload={setReload} reload={reload} setDisableButton={setDisableButton}/>
             <Content>
                 {renderOneBook?
                 <OneBookContainer>
-                    {oneBook.map(book => <><RenderBooks title={book.title} author={book.author} id={book.id} setRenderOneBook={setRenderOneBook} />
+                    {oneBook.map(book => <><RenderBooks title={book.title} author={book.author} id={book.id} disabled={disableButton} />
                     <span>{book.synopsis}</span></>)}
                 </OneBookContainer>
                 :
-                <BooksContainer>
-                    {books.map(book => <RenderBooks title={book.title} author={book.author} id={book.id}/>)}
-                </BooksContainer>
+                <>
+                    {renderReads?
+                        <ReadsContainer>
+                            <>
+                            {(books.length===0)?<h1>Você ainda não adicinou leituras</h1>
+                            :
+                            books.map(book => <RenderReads key={book.id} title={book.book.title} author={book.book.author} id={book.bookId} readPages={book.readPages} totalPages={book.book.totalPages}/>)}
+                            </>
+                        </ReadsContainer>
+                        :
+                        <BooksContainer>
+                            <>
+                            {(books.length===0)?<h1></h1>
+                            :
+                            books.map(book => <RenderBooks key={book.id} title={book.title} author={book.author} id={book.id} disabled={disableButton}/>)}
+                            </>
+                        </BooksContainer>}
+                </>
                 }
             </Content>
             
@@ -102,6 +156,7 @@ const BooksContainer = styled.div`
     overflow: hidden;
     overflow-y: scroll;
     padding-bottom:2%;
+    border-radius:10px;
 `
 const Books = styled.div`
     width:29%;
@@ -136,7 +191,7 @@ const BookInfo = styled.div`
         width:100%;
         display:flex;
         flex-direction:column;
-        h1{ 
+        h2{ 
             word-wrap: break-word;
             color:red;
             font-size:18px;
@@ -145,21 +200,21 @@ const BookInfo = styled.div`
             }
             margin-bottom:10px;
         }
-        h2{
+        h3{
             color: gray;
             font-size:16px;
         }
     }
     button{
         width:35%;
-        display:flex;
+        display: flex;
         justify-content: center;
         align-items:center;
         border: none;
         border-radius: 35px;
         padding-bottom:5px;
         font-size:30px;
-        color: ${props => props.disabled ? "red" : "green" };
+        color: ${(props) => (props.disabled ? "green" : "red")};
         :hover{
             cursor:pointer;
         }
@@ -168,7 +223,7 @@ const BookInfo = styled.div`
 `
 
 const OneBookContainer = styled.div` 
-    width: 70vw;
+    width: 60vw;
     height:80vh;
     background-color: #F0AD35;
     margin-top:5vh;
@@ -180,3 +235,86 @@ const OneBookContainer = styled.div`
         color: #ffffff;
     }
 `
+const ReadsContainer = styled.div`
+    width: 60vw;
+    height:80vh;
+    background-color: #A5A1CE;
+    margin-top:5vh;
+    display:flex;
+    flex-direction:column;
+    align-items:center;
+    overflow: hidden;
+    overflow-y: scroll;
+    padding-bottom:2%;
+
+    h1{
+        margin-top:30%;
+        color: #ffffff;
+        font-family: "Passion One";
+        font-weight: 400;
+        font-size: 20px;
+        line-height: 54px;
+        letter-spacing: 0.02em;
+    }
+`
+const Reads = styled.div`
+    width:90%;
+    height:25%;
+    background-color: #ffffff;
+    display: flex;
+    margin: 2%;
+    border-radius: 8px;
+    align-items: center;
+    justify-content: space-around;
+
+    img{
+        width:15%;
+        height:90%;
+        object-fit:cover;
+
+        :hover{
+            cursor:pointer;
+        }
+    }
+        
+`
+const ReadBookInfo = styled.div`
+    display:flex;
+    flex-direction:column;
+    justify-content:space-between;
+    width:65%;
+    height:80%;
+    background-color:#ffffff;
+
+    div:nth-child(1){
+        width:100%;
+        display:flex;
+        flex-direction:column;
+        h2{ 
+            word-wrap: break-word;
+            color:red;
+            font-size:18px;
+            :hover{
+                cursor: pointer;
+            }
+            margin-bottom:10px;
+        }
+        h3{
+            color: gray;
+            font-size:16px;
+        }
+    }
+   
+`
+const NewValue = styled.div`
+    display:flex;
+    width:100%;
+    justify-content: space-around;
+    align-items:center;
+    span{
+        :hover{
+            cursor: pointer;
+        }
+    }
+`
+
