@@ -20,8 +20,8 @@ export default function WelcomePage(){
             <Init>
                 <img src={logoImg} alt="logo"/>
                 <Welcome>
-                    <Entrar onClick={SignIn}>Sign in</Entrar>
-                    <Entrar onClick={SignUp}>Sign up</Entrar>
+                    <Entrar data-test-id="signin" onClick={SignIn}>Sign in</Entrar>
+                    <Entrar data-test-id="signup" onClick={SignUp}>Sign up</Entrar>
                 </Welcome>
             </Init>
         </>
