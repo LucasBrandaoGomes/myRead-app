@@ -1,10 +1,10 @@
 import styled from "styled-components"
 import { Link } from "react-router-dom"
-import axios from "axios";
 import {useNavigate} from 'react-router-dom';
 import  { useState } from  "react"
 import { ThreeDots } from "react-loader-spinner";
-
+import { alert } from "../utilities/alerts";
+import { SignUpApi } from "../services/myReadServices";
 
 export default function SignUp(){
     
@@ -28,7 +28,7 @@ export default function SignUp(){
             
             }
 
-        const promise = axios.post("http://localhost:4001/sign-up", infoSignUp)
+        const promise =  SignUpApi(infoSignUp)
         
         promise
         .then(res =>{
@@ -38,8 +38,10 @@ export default function SignUp(){
         .catch(err=> {
             if(err.response.status === 422){
                 alert({text: "Preencha os dados corretamente", type: "error"})
+            }else if (err.response.status === 409){
+                alert({text: `Email já cadastrado`, type: "error"})
             }else{
-                alert(err.response.data)
+                alert({text: "Erro ao efetuar cadastro", type: "error"})
             }
         setDisableButton(false);});
 
