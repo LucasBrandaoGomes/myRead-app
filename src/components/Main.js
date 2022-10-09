@@ -1,31 +1,29 @@
 import styled from "styled-components";
-import {useState} from "react";
-import axios from "axios";
-import {useEffect} from 'react';
-import { useContext } from "react";
-import UserContext from "../contexts/Context";
+import {useState, useEffect, useContext} from "react";
 import Header from "./Header";
-import { checkLocalStorageToRefresh } from "./utils/autoRefresh";
+import { addReadApi, getBooksApi, getToken, updateReadApi } from "../services/myReadServices";
+import { useNavigate } from "react-router-dom";
 
 export default function Main(){
 
-    const { infoLogin } = useContext(UserContext);
     const [books, setBooks] = useState([])
     const [renderOneBook, setRenderOneBook] = useState(false)
     const [oneBook, setOneBook] = useState([])
     const [disableButton,setDisableButton] = useState(true)
     const [renderReads, setRenderReads] = useState(false)
     const [reload, setReload] = useState(false)
-    
-    const config ={
-        headers:{Authorization: `Bearer ${infoLogin[0]}`}
-        }
+    const navigate = useNavigate()
 
+    const result = getToken()
+    if(!result){
+            alert('Efetue login')
+            navigate('/sign-in')
+    }
 
     useEffect(() => {
 
-        const promise = axios.get("http://localhost:4001/books", config)
-        
+        const promise = getBooksApi()
+
         promise.then(res => {
             setBooks([...res.data]);
             });
@@ -60,10 +58,7 @@ export default function Main(){
     async function AddNewRead(id){
         
         try {
-            const response = await axios.post(
-              `http://localhost:4001/books/reads/${id}`, {}, config
-              
-            );
+            const response = await addReadApi(id)
             setDisableButton(true);
 
           } catch (err) {
@@ -77,9 +72,7 @@ export default function Main(){
         const data = prompt("Digite sua págia atual:")
         const value = {readPages: data}
         try {
-            const response = await axios.put(
-              `http://localhost:4001/books/reads/${id}`, value , config
-            );
+            const response = await updateReadApi(id)
           } catch (err) {
             if(err.response.data === "Invalid page value"){
                 alert("Invalid page value")

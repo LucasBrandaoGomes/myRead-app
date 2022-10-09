@@ -1,25 +1,17 @@
 import { useContext, useState, useEffect } from "react";
-import axios from "axios";
 import styled from "styled-components";
 import { useNavigate } from "react-router-dom";
-import UserContext from "../contexts/Context";
+import { getReadsApi, searchBookApi } from "../services/myReadServices";
 
 export default function Header({setBooks, setRenderOneBook, setRenderReads, reload, setReload, setDisableButton}) {
     const navigate = useNavigate()
     const [search, setSearch] = useState ('')
-    const { infoLogin, setInfoLogin } = useContext(UserContext);
-
-    const config ={
-      headers:{Authorization: `Bearer ${infoLogin[0]}`}
-      }
 
     async function searchBook(str) {
         setSearch(str);
 
         try {
-          const response = await axios.get(
-            `http://localhost:4001/books?search=${search}`, config
-          );
+          const response = await searchBookApi(search)
           setRenderReads(false)
           setRenderOneBook(false)
           setBooks(response.data);
@@ -31,9 +23,7 @@ export default function Header({setBooks, setRenderOneBook, setRenderReads, relo
     async function myReads() {
       setDisableButton(true)
       try {
-        const response = await axios.get(
-          `http://localhost:4001/books/reads`, config
-        );
+        const response = await getReadsApi()
         setRenderOneBook(false)
         setBooks(response.data);
         setRenderReads(true)
