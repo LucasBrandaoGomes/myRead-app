@@ -31,12 +31,13 @@ export default function SignUp(){
         const promise = axios.post("http://localhost:4001/sign-up", infoSignUp)
         
         promise
-        .then(res =>{ 
+        .then(res =>{
+            alert({text: "Seja bem vindo ao myRead", type: "success"}) 
             navigate("/sign-in");
         })
         .catch(err=> {
             if(err.response.status === 422){
-                alert("Preencha os dados corretamente")
+                alert({text: "Preencha os dados corretamente", type: "error"})
             }else{
                 alert(err.response.data)
             }
@@ -47,7 +48,7 @@ export default function SignUp(){
     return(
         
         <ContainerAuth >
-            <h1>agendIN</h1>
+            <h1>myRead</h1>
             <Form onSubmit={SubmitSignUp} >
                 <input type="email" disabled={disableButton} placeholder="email"  value={email} onChange={e => setEmail(e.target.value)} required/>
                 <input type="password" disabled={disableButton} placeholder="senha" value={password} onChange={e => setPassword(e.target.value)} required/>
@@ -70,16 +71,16 @@ const ContainerAuth = styled.div`
     flex-direction: column;
     align-items:center;
     justify-content:center;
-    background-color: #F0AD35;
+    background-color: #ffde65;
 
     h1{
-    font-family: 'Shippori Antique';
+    font-family: 'Oswald';
     font-style: normal;
     font-weight: 700;
-    font-size: 40px;
+    font-size: 60px;
     line-height: 31px;
 
-    color: #fff5e0;
+    color: #5271ff;
 
     margin-bottom: 5%;
     margin-top: 5%;
@@ -94,19 +95,23 @@ const ContainerAuth = styled.div`
 const Form = styled.form`
     display:flex;
     flex-direction: column;
-    width: 28%;
-    background-color: #D37545;
+    width: 100%;
+    background-color: #ffde59;
+    display:flex;
+    justify-content:center;
+    align-items: center;
     input{
-        height:5vh;
+        height:8vh;
+        width:60%;
         background: ${props => props.disabled ? "grey" : "#fff5e0" };
         color: ${props => props.disabled ? "#AFAFAF" : "grey" };
-        font-family: 'Lexend Deca';
+        font-family: 'Oswald';
         font-style: italic; 
-        font-weight: 400;
-        font-size: 19.976px;
-        line-height: 25px;
+        font-weight: 300;
+        font-size: 22px;
+        line-height: 20px;
         margin-bottom:8px;
-        border: 1px solid #D5D5D5;
+        border: 1px solid #5271ff;
         border-radius: 5px;
         ::placeholder{
             font-size: 23px;
@@ -115,29 +120,31 @@ const Form = styled.form`
 
 
     @media (max-width: 580px) {
-        width: 48%;
+        margin-top:10%;
+        width: 120%;
     }    
 
 `
 const Cadastrar = styled.button`
-    border: none;     
-        font-family: 'Shippori Antique';
+        border: none;     
+        font-family: 'Oswald';
         font-style: normal;
         font-weight: 700;
         font-size: 35px;
         line-height: 26px;
         text-align: center;
-        color: #D37545;
+        color: #5271ff;
         
         display: flex;        
         justify-content: center;
         align-items: center;
         padding: 18px 122px;
-        gap: 10px;        
-        width: 100%;
+        margin-top: 5vh;
+        width: 30%;
         height: 9vh;
         background: #fff5e0;
-        
+        border: 4px solid #5271ff;
+
         border-radius: 8px;
         opacity: ${props => props.disabled ? 0.4 : 1 };
 
@@ -148,12 +155,12 @@ const Cadastrar = styled.button`
 const Loguese = styled.div`
     margin-top:30px;
     p{
-        font-family: 'Shippori Antique';
+        font-family: 'Oswald';
         font-style: normal;
-        font-weight: 700;
+        font-weight: 500;
         font-size: 18px;
         line-height: 18px;
 
-        color: #fff5e0;
+        color: #5271ff;
     }
 `
