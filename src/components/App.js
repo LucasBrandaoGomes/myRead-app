@@ -5,6 +5,7 @@ import Context from "../contexts/Context.js";
 import SignIn from './SignIn.js';
 import Main from './Main.js';
 import ProtectedRoute from './ProtectedRoute.js';
+import Welcome from './WelcomePage.js';
 
 export default function App(){
     
@@ -14,6 +15,7 @@ export default function App(){
         <Context.Provider value = {{infoLogin , setInfoLogin }}>
             <BrowserRouter>
               <Routes>
+                  <Route path="/" element={<Welcome />}/>
                   <Route path="/sign-up" element={<SignUp />}/>
                   <Route path="/sign-in" element={<SignIn />}/>
                   <Route element={<ProtectedRoute />}>
