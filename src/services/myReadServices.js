@@ -50,10 +50,25 @@ function updateReadApi(id, value) {
 	return promise;
 }
 
+function deleteReadApi(id) {
+    const auth = getToken();
+	const promise = axios.delete(`${BASE_URL}/books/reads/${id}`, auth.token);
+	return promise;
+}
+
 function searchBookApi(search) {
     const auth = getToken();
 	const promise = axios.get(`${BASE_URL}/books?search=${search}`, auth.token);
 	return promise;
 }
 
-export {SignInApi, SignUpApi, getBooksApi, getReadsApi, updateReadApi, addReadApi, searchBookApi, getToken};
+export {
+	SignInApi, 
+	SignUpApi, 
+	getBooksApi, 
+	getReadsApi, 
+	updateReadApi, 
+	addReadApi, 
+	searchBookApi, 
+	getToken, 
+	deleteReadApi};

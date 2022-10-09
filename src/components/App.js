@@ -4,7 +4,7 @@ import SignUp from './SignUp.js'
 import Context from "../contexts/Context.js";
 import SignIn from './SignIn.js';
 import Main from './Main.js';
-import ProtectedRoute from './ProtectedRoute.js';
+import ProtectedRoute from '../utilities/ProtectedRoute.js';
 import Welcome from './WelcomePage.js';
 
 export default function App(){
