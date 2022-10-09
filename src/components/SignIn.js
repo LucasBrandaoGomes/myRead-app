@@ -4,7 +4,7 @@ import axios from "axios"
 import { ThreeDots } from "react-loader-spinner";
 import {useNavigate, Link} from 'react-router-dom';
 import Context from "../contexts/Context.js"
-
+import { alert } from "../utilities/alerts.js";
 
 export default function SignIn(){
 
@@ -28,10 +28,12 @@ export default function SignIn(){
             const response = await axios.post("http://localhost:4001/sign-in", sendLogin)
             setInfoLogin([response.data]);
             saveLoginInLocalStorage(response.data)
+            alert({text: "read it all", type: "success"}) 
             navigate("/main");
 
         }catch(err){
-            alert(`Error: ${err.response.data}`);
+            if(err.response.data === "Incorrect email or password");
+            alert({text: "Preencha os dados corretamente", type: "error"})
             setDisableButton(false)
         }
         }    

@@ -31,12 +31,13 @@ export default function SignUp(){
         const promise = axios.post("http://localhost:4001/sign-up", infoSignUp)
         
         promise
-        .then(res =>{ 
+        .then(res =>{
+            alert({text: "Seja bem vindo ao myRead", type: "success"}) 
             navigate("/sign-in");
         })
         .catch(err=> {
             if(err.response.status === 422){
-                alert("Preencha os dados corretamente")
+                alert({text: "Preencha os dados corretamente", type: "error"})
             }else{
                 alert(err.response.data)
             }
