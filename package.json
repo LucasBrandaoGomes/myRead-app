@@ -1,5 +1,5 @@
 {
-  "name": "agendin",
+  "name": "myread",
   "version": "0.1.0",
   "private": true,
   "dependencies": {
@@ -43,6 +43,7 @@
     ]
   },
   "devDependencies": {
+    "cypress": "^10.9.0",
     "nodemon": "^2.0.20"
   }
 }
