@@ -1,10 +1,11 @@
 import styled from "styled-components";
 import {useState, useEffect} from "react";
 import Header from "./Header";
-import { addReadApi, getBooksApi, getToken, updateReadApi } from "../services/myReadServices";
+import { addReadApi, getBooksApi, getReadsApi, getToken, updateReadApi } from "../services/myReadServices";
 import { useNavigate } from "react-router-dom";
 import logoImg from '../img/myRead.png'
 import { alert } from "../utilities/alerts";
+import Swal from "sweetalert2";
 
 export default function Main(){
 
@@ -71,15 +72,42 @@ export default function Main(){
           }
     }
 
+    async function myReads() {
+        try {
+          const response = await getReadsApi()
+          setRenderOneBook(false)
+          setBooks(response.data);
+          setRenderReads(true)
+        } catch (err) {
+          console.log(`Error: ${err.response.data}`);
+        }
+      }
 
     async function updatePage(id){
-        const data = prompt("Digite sua págia atual:")
-        const value = {readPages: data}
+        const data = await Swal.fire({
+            title: 'Atualize sua leitura',
+            input: 'number',
+            inputLabel: 'Qual a página você parou?',
+            color:"#D35029",
+            inputPlaceholder: 'página',
+            confirmButtonColor: '#ffde59',
+            showCancelButton: true,
+            inputValidator: (value) => {
+              if (!value) {
+                return value
+              }
+            }
+            })
+        if(data.dismiss === "cancel" || data.dismiss === "backdrop"){
+            return;
+        }
+        const value = {readPages : data.value}
         try {
             const response = await updateReadApi(id, value)
+            await myReads()
           } catch (err) {
-            if(err.response.data === "Invalid page value"){
-                alert("Invalid page value")
+            if(err.response.status === 422){
+                alert({text:"Digite um valor válido para página", type: "warning"})
             }
           }
     }
