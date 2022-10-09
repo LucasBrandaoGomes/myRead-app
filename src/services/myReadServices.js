@@ -4,7 +4,6 @@ const BASE_URL = "http://localhost:4001";
 
 function getToken() {
 	const auth = JSON.parse(localStorage.getItem("autoLogin"));
-    console.log(auth)
 	if (auth) {
 		const token = {
 			headers: {

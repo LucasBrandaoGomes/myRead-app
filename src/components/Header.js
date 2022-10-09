@@ -21,7 +21,6 @@ export default function Header({setBooks, setRenderOneBook, setRenderReads, relo
     }
 
     async function myReads() {
-      setDisableButton(true)
       try {
         const response = await getReadsApi()
         setRenderOneBook(false)
@@ -59,7 +58,7 @@ export default function Header({setBooks, setRenderOneBook, setRenderReads, relo
 const HeaderContainer = styled.div`
   width: 100vw;
   height: 10vh;
-  background: #A5A1CE;
+  background: #5271ff;
   position: relative;
   display: flex;
   justify-content: space-between;
@@ -68,7 +67,7 @@ const HeaderContainer = styled.div`
 
 const Title = styled.h1`
   width: 15%;
-  font-family: "Passion One";
+  font-family: "Oswald";
   font-weight: 700;
   font-size: 30px;
   line-height: 54px;
@@ -84,7 +83,7 @@ const Title = styled.h1`
 const Search = styled.div`
         width: 25%;
 
-        background-color:#fff5e0;
+        background-color:#ffde65;
         border:solid 1px #fff5e0;
         border-radius:8px;
         display: flex;
@@ -93,15 +92,17 @@ const Search = styled.div`
             float:left;
             background-color:transparent;
             padding-left:5px;
-            font-family: 'Shippori Antique';
+            font-family: 'Oswald';
             font-style: italic;
             font-size:18px;
+            font-weight:700;
             border:none;
             height:32px;
             width:80%;
+            color:#ffffff;
         }      
         ion-icon{
-            color: #696969;
+            color: #5271ff;
             margin-left: 2px;
         }  
 
