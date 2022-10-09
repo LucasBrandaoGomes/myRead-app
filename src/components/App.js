@@ -4,7 +4,7 @@ import SignUp from './SignUp.js'
 import Context from "../contexts/Context.js";
 import SignIn from './SignIn.js';
 import Main from './Main.js';
-
+import ProtectedRoute from './ProtectedRoute.js';
 
 export default function App(){
     
@@ -16,7 +16,9 @@ export default function App(){
               <Routes>
                   <Route path="/sign-up" element={<SignUp />}/>
                   <Route path="/sign-in" element={<SignIn />}/>
-                  <Route path="/main" element={<Main />}/> 
+                  <Route element={<ProtectedRoute />}>
+                    <Route path="/main" element={<Main />}/>
+                  </Route>
  
               </Routes>    
             </BrowserRouter>
