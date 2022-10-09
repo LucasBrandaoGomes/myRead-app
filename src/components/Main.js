@@ -1,7 +1,7 @@
 import styled from "styled-components";
 import {useState, useEffect} from "react";
 import Header from "./Header";
-import { addReadApi, getBooksApi, getReadsApi, getToken, updateReadApi } from "../services/myReadServices";
+import { addReadApi, deleteReadApi, getBooksApi, getReadsApi, getToken, updateReadApi } from "../services/myReadServices";
 import { useNavigate } from "react-router-dom";
 import logoImg from '../img/myRead.png'
 import { alert } from "../utilities/alerts";
@@ -122,12 +122,23 @@ export default function Main(){
                             <h3>{author}</h3>
                         </div>
                         <NewValue>
-                            <p onClick={() => updatePage(id)}>{readPages}/{totalPages}</p>                            
+                            <p onClick={() => updatePage(id)}>{readPages}/{totalPages}</p>
+                            <ion-icon onClick={() => deleteRead(id)} name="trash-outline"></ion-icon>                         
                         </NewValue>
                         
                     </ReadBookInfo>
             </Reads>
         )
+    }
+
+    async function deleteRead(id){
+        
+        try {
+            await deleteReadApi(id)
+            await myReads()
+          } catch (err) {
+            console.log(err.response.status)
+          }
     }
 
     return(
@@ -399,9 +410,16 @@ const ReadBookInfo = styled.div`
 const NewValue = styled.div`
     display:flex;
     width:100%;
-    justify-content: space-around;
+    justify-content: space-between;
     align-items:center;
     span{
+        :hover{
+            cursor: pointer;
+        }
+    }
+    ion-icon{
+        font-size:24px;
+        color:#D35029;
         :hover{
             cursor: pointer;
         }
