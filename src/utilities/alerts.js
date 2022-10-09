@@ -4,7 +4,7 @@ export function alert({ text, type }) {
   Swal.fire({
     title: type === 'success' ? 'Success!' : 'Error!',
     text,
-    icon: type || 'error',
+    icon: type || 'warning',
     confirmButtonText: 'Continue',
     confirmButtonColor: '#ffde59',
   });
