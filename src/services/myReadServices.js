@@ -1,4 +1,4 @@
-import Api from "./api";
+import Api from "./api.js";
 
 function getToken() {
 	const auth = JSON.parse(localStorage.getItem("autoLogin"));
