@@ -45,7 +45,7 @@ Depois, dentro da pasta, rode o seguinte comando para instalar as dependencias.
 ```
 npm install
 ```
-Crie um arquivo .env na raiz setando 
+No diretorio service, arquivo myReadServices.js , configure a variável REACT_APP_API_BASE_URL
 
 ```
 REACT_APP_API_BASE_URL=http://localhost:4001
