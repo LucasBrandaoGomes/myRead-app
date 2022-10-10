@@ -17,6 +17,7 @@ Com esse app o usuário pode:
  - Vizualizar informações a cerca de u livro selecionado
  - Adicionar livros a suas leituras
  - Editar sua página de leitura
+ - utiliar a aplicação responsiva em mobiles (screen < 540px)
 
 
 ## :computer:	 Tecnologias e Ferramentas
