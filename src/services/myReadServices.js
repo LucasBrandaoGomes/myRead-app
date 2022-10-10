@@ -1,4 +1,6 @@
-import Api from "./api.js";
+import axios from "axios";
+
+const BASE_URL = "https://myread-api.herokuapp.com";
 
 function getToken() {
 	const auth = JSON.parse(localStorage.getItem("autoLogin"));
@@ -15,48 +17,48 @@ function getToken() {
 
 
 function SignUpApi(body) {
-	const promise = Api.post(`/sign-up`, body);
+	const promise = axios.post(`${BASE_URL}/sign-up`, body);
 	return promise;
 }
 
 function SignInApi(body) {
-	const promise = Api.post(`/sign-in`, body);
+	const promise = axios.post(`${BASE_URL}/sign-in`, body);
 	return promise;
 }
 
 function getBooksApi() {
     const auth = getToken();
-	const promise = Api.get(`/books`, auth.token);
+	const promise = axios.get(`${BASE_URL}/books`, auth.token);
 	return promise;
 }
 
 function addReadApi(id) {
     const auth = getToken();
-	const promise = Api.post(`/books/reads/${id}`, {}, auth.token);
+	const promise = axios.post(`${BASE_URL}/books/reads/${id}`, {}, auth.token);
 	return promise;
 }
 
 function getReadsApi() {
     const auth = getToken();
-	const promise = Api.get(`/books/reads`, auth.token);
+	const promise = axios.get(`${BASE_URL}/books/reads`, auth.token);
 	return promise;
 }
 
 function updateReadApi(id, value) {
     const auth = getToken();
-	const promise = Api.put(`/books/reads/${id}`, value, auth.token);
+	const promise = axios.put(`${BASE_URL}/books/reads/${id}`, value, auth.token);
 	return promise;
 }
 
 function deleteReadApi(id) {
     const auth = getToken();
-	const promise = Api.delete(`/books/reads/${id}`, auth.token);
+	const promise = axios.delete(`${BASE_URL}/books/reads/${id}`, auth.token);
 	return promise;
 }
 
 function searchBookApi(search) {
     const auth = getToken();
-	const promise = Api.get(`/books?search=${search}`, auth.token);
+	const promise = axios.get(`${BASE_URL}/books?search=${search}`, auth.token);
 	return promise;
 }
 
