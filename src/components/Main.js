@@ -329,12 +329,11 @@ const ReadsContainer = styled.div`
     margin-bottom:10px;
 
     h1{
-        margin-top:30%;
-        color: #ffffff;
-        font-family: "Passion One";
+        margin-top:15%;
+        font-family: "Oswald";
         font-weight: 400;
-        font-size: 20px;
-        line-height: 54px;
+        font-size:20px;
+        color: #d35029;
         letter-spacing: 0.02em;
     }
     span{
@@ -353,6 +352,12 @@ const ReadsContainer = styled.div`
         margin-bottom:5px;
         :hover{
             cursor: pointer;
+        }
+    }
+    @media(max-width:540px){
+        h1{
+            margin-top:50%;
+ 
         }
     }
 `
