@@ -13,11 +13,11 @@ Com esse app o usuário pode:
  - Efetuar cadastro
  - Efetuar login
  - Permanecer logado até que efetue logout
- - Vizualizar coletânea de livros disponíveis
- - Vizualizar informações a cerca de u livro selecionado
+ - Visualizar coletânea de livros disponíveis
+ - Visualizar informações a cerca de um livro selecionado
  - Adicionar livros a suas leituras
  - Editar sua página de leitura
- - utiliar a aplicação responsiva em mobiles (screen < 540px)
+ - Utilizar a aplicação responsiva em mobiles (screen < 540px)
 
 
 ## :computer:	 Tecnologias e Ferramentas
