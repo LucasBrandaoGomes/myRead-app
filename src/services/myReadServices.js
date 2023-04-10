@@ -1,6 +1,6 @@
 import axios from "axios";
 
-const BASE_URL = "https://myreadback.onrender.com";
+const BASE_URL = "https://my-read.onrender.com";
 
 function getToken() {
 	const auth = JSON.parse(localStorage.getItem("autoLogin"));
